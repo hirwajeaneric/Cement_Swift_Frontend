@@ -1,0 +1,105 @@
+import { useEffect, useState } from "react"
+// import { Store } from "../../../context/StoreContext";
+// import LoadingButton from "../../other-components/LoadingButton";
+
+/* eslint-disable react/prop-types */
+const AdminAccountForm = () => {
+    const [userInfo, setUserInfo] = useState({});
+
+    useEffect(() => {
+        let user = JSON.parse(localStorage.getItem("admin"));
+        setUserInfo(user);
+    }, []);
+
+    // const { handleResponseMessage } = useContext(Store); // Correctly destructure handleResponseMessage
+    const [loading, setLoading] = useState(false);
+
+    const handleFormInput = (e) => {
+        setUserInfo({ ...userInfo, [e.target.id]: e.target.value });
+    };
+
+    const handleUpdateAccountInfo = (e) => {
+        e.preventDefault();
+        setLoading(true);
+
+        // UpdateUserInfoRequest(userInfo)
+        //     .then((response) => {
+        //         if (response) {
+        //             localStorage.setItem("client", JSON.stringify(response.user));
+        //             window.location.reload();
+        //         }
+        //     })
+        //     .catch(error => {
+        //         console.log(error)
+        //         // handleResponseMessage('error', error.message); // Use 'error' type for error messages
+        //     })
+        //     .finally(() => {
+        //         setLoading(false);
+        //     });
+    }
+
+    return (
+        <form onSubmit={handleUpdateAccountInfo} className="flex flex-col gap-4 bg-slate-100 w-full px-5 md:px-12 pt-5 md:pt-8 pb-12">
+            <div className="flex flex-wrap justify-between w-full items-start">
+                <div className="flex flex-col w-full md:w-[49%] mb-3 md:mb-0">
+                    <label htmlFor="firstName" className="block font-medium text-gray-700"> First name </label>
+                    <input
+                        type="text"
+                        id="firstName"
+                        value={userInfo.firstName || ""}
+                        onChange={handleFormInput}
+                        placeholder="John"
+                        className="mt-1 w-full py-2 px-3 rounded-md border-gray-200 shadow-sm sm:text-sm"
+                    />
+                </div>
+                <div className="flex flex-col w-full md:w-[49%] mb-3 md:mb-0">
+                    <label htmlFor="lastName" className="block font-medium text-gray-700"> Last Name </label>
+                    <input
+                        type="text"
+                        id="lastName"
+                        value={userInfo.lastName || ""}
+                        onChange={handleFormInput}
+                        placeholder="Doe"
+                        className="mt-1 w-full py-2 px-3 rounded-md border-gray-200 shadow-sm sm:text-sm"
+                    />
+                </div>
+            </div>
+
+            <div className="flex flex-wrap justify-between w-full items-start">
+                <div className="flex flex-col w-full md:w-[49%] mb-3 md:mb-0">
+                    <label htmlFor="email" className="block font-medium text-gray-700"> Email </label>
+                    <input
+                        type="email"
+                        id="email"
+                        value={userInfo.email || ""}
+                        onChange={handleFormInput}
+                        placeholder="myemail@example.com"
+                        className="mt-1 w-full py-2 px-3 rounded-md border-gray-200 shadow-sm sm:text-sm"
+                    />
+                </div>
+                <div className="flex flex-col w-full md:w-[49%] mb-3 md:mb-0">
+                    <label htmlFor="phone" className="block font-medium text-gray-700"> Phone </label>
+                    <input
+                        type="text"
+                        id="phone"
+                        maxLength={10}
+                        minLength={10}
+                        value={userInfo.phone || ""}
+                        onChange={handleFormInput}
+                        placeholder="07xxxxxxxx"
+                        className="mt-1 w-full py-2 px-3 rounded-md border-gray-200 shadow-sm sm:text-sm"
+                    />
+                </div>
+            </div>
+
+            <button
+                type="submit"
+                disabled={loading}
+                className="inline-block w-min rounded border bg-green-800 px-12 py-3 text-sm font-medium text-white hover:bg-green-600 focus:outline-none focus:ring active:text-green-500">
+                {loading ? "Processing" : "Update"}
+            </button>
+        </form>
+    )
+}
+
+export default AdminAccountForm
