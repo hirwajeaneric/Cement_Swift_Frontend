@@ -12,25 +12,26 @@ const Success = () => {
     const handleConfirmation = useCallback(() => {
         // Retrieve user info from local storage
         const userInfo = JSON.parse(localStorage.getItem("user"));
-        const deliveryInfo = JSON.parse(localStorage.getItem("delivery"));
-
+        const totalPrice = JSON.parse(localStorage.getItem("total"));
+        
+        const order = {
+            totalPrice: totalPrice,
+            customerId: userInfo._id,
+            customer: {
+                fullName: userInfo.fullName,
+                email: userInfo.email,
+                phone: userInfo.phone
+            },
+            delivery: {
+                province: userInfo.province,
+                district: userInfo.district,
+                city: userInfo.city,
+                streetAddress: userInfo.streetAddress,
+            }
+        }
         // Send the request to the server
         axios
-            .put(`${serverAddress}/api/v1/cement-swift/cart/confirm?customerId=${userInfo._id}`, {
-                customer: {
-                    fullName: userInfo.fullName,
-                    email: userInfo.email,
-                    phone: userInfo.phone
-                },
-                delivery: {
-                    address: deliveryInfo.address,
-                    province: deliveryInfo.province,
-                    district: deliveryInfo.district,
-                    city: deliveryInfo.city,
-                    postalCode: deliveryInfo.postalCode,
-                    deliveryDate: deliveryInfo.deliveryDate
-                }
-            })
+            .put(`${serverAddress}/api/v1/cement-swift/order/add`, order)
             .then((response) => {
                 console.log(response.data);
                 setOrder(response.data.order)

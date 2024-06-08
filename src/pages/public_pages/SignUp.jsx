@@ -10,6 +10,7 @@ const SignUp = () => {
   const navigate = useNavigate();
   const [searchParams, setSetSearchParams] = useSearchParams();
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [message, setMessage] = useState({ title: "", description: "" });
   const [error, setError] = useState({ title: "", description: "" });
@@ -49,21 +50,23 @@ const SignUp = () => {
       return;
     } else {
       const { confirmPassword, ...rest } = user;
-
+      console.log(confirmPassword);
       setError({ title: '', description: '' });
+      setLoading(true);
 
       axios.post(`${serverAddress}/api/v1/cement-swift/auth/signup`, rest)
         .then((response) => {
           if (response.status === 201) {
             setMessage({ title: "Success", description: response.data.message });
             clearInputs();
+            setLoading(false);
             setTimeout(() => {
               if (searchParams.get("redirect")) {
                 navigate(`/signin?redirect=${searchParams.get("redirect")}`);
               } else {
                 navigate('/signin');
               }
-            }, 3000);
+            }, 1000);
           }
         })
         .catch(error => {
@@ -205,8 +208,8 @@ const SignUp = () => {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <button type="submit" className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
-                  Create an account
+                <button type="submit" disabled={loading} className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
+                  {loading ? "Processing..." : "Create an account"}
                 </button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">

@@ -1,26 +1,19 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import SuccessAlert from "../../components/SuccessAlert";
 import ErrorAlert from "../../components/ErrorAlert";
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
 const SignIn = () => {
-  const navigate = useNavigate();
   const [searchParams, setSetSearchParams] = useSearchParams();
 
   const [message, setMessage] = useState({ title: "", description: "" });
   const [error, setError] = useState({ title: "", description: "" });
   const [user, setUser] = useState({ email: '', password: ''});
   const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLaoding] = useState(false);
-
-  const clearInputs = () => {
-    setUser({ email: '', password: '' });
-    setMessage({ title: "", description: "" });
-    setError({ title: "", description: ""});
-  }
+  const [loading, setLoading] = useState(false);
 
   const handleInputs = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })
@@ -28,29 +21,26 @@ const SignIn = () => {
 
   const signIn = (e) => {
     e.preventDefault();
-
+    setLoading(true);
     setError({ title: "", description:""});
     
     axios.post(`${serverAddress}/api/v1/cement-swift/auth/signin`, user)
     .then((response) => {
       if (response.status === 200) {
-
           setMessage({
             title: "Success",
             description: response.data.message
           });
-
+          setLoading(false);
           localStorage.setItem('user', JSON.stringify(response.data.user ));
-
-          clearInputs();
 
           setTimeout(() => {
             if (searchParams.get("redirect")) {
-              navigate(`/${searchParams.get("redirect")}`);
+              window.location.replace(`/${searchParams.get("redirect")}`);
             } else {
-              navigate('/');
+              window.location.replace('/');
             }
-          }, 3000);
+          }, 2000);
         }
       })
       .catch(error => {
@@ -153,8 +143,8 @@ const SignIn = () => {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <button type="submit" className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
-                  Sign in
+                <button type="submit" disabled={loading} className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
+                  {loading ? "Processing..." : "Sign in"}
                 </button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
