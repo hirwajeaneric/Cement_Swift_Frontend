@@ -13,7 +13,7 @@ const Success = () => {
         // Retrieve user info from local storage
         const userInfo = JSON.parse(localStorage.getItem("user"));
         const totalPrice = JSON.parse(localStorage.getItem("total"));
-        
+
         const order = {
             totalPrice: totalPrice,
             customerId: userInfo._id,
@@ -31,7 +31,7 @@ const Success = () => {
         }
         // Send the request to the server
         axios
-            .put(`${serverAddress}/api/v1/cement-swift/order/add`, order)
+            .post(`${serverAddress}/api/v1/cement-swift/order/add`, order)
             .then((response) => {
                 console.log(response.data);
                 setOrder(response.data.order)
