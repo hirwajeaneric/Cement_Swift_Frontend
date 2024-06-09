@@ -4,13 +4,6 @@ import TopNavigation from "../../components/TopNavigation";
 
 const DashboardMainPage = () => {
   return (
-    // <div className="flex md:h-screen flex-wrap w-full max-w-ful justify-start md:justify-between items-start">
-    //   <AdminSideMenuBar />
-    //   <div className="md:h-screen w-full md:w-4/5 p-5">
-    //     <Outlet />
-    //   </div>
-    // </div>
-
     <div className="flex h-screen relative">
     <AdminSideMenuBar />
     <div className="flex flex-col flex-1 w-full md:w-1/6 relative">

@@ -4,14 +4,9 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 const columns = [
     {
-        field: 'firstName',
-        headerName: 'First name',
-        width: 200,
-    },
-    {
-        field: 'lastName',
-        headerName: 'Last name',
-        width: 200,
+        field: 'fullName',
+        headerName: 'Name',
+        width: 180,
     },
     {
         field: 'email',
@@ -21,17 +16,27 @@ const columns = [
     {
         field: 'phone',
         headerName: 'Phone',
+        width: 100,
+    },
+    {
+        field: 'city',
+        headerName: 'City',
         width: 150,
     },
     {
-        field: 'addressLine1',
-        headerName: 'Address Line 1',
-        width: 200,
+        field: 'province',
+        headerName: 'Province',
+        width: 150,
     },
     {
-        field: 'addressLine2',
-        headerName: 'Address Line 2',
-        width: 200,
+        field: 'district',
+        headerName: 'District',
+        width: 150,
+    },
+    {
+        field: 'streetAddress',
+        headerName: 'Street Address',
+        width: 150,
     },
 ];
 

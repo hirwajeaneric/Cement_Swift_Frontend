@@ -20,7 +20,8 @@ const SignUp = () => {
     phone: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'client',
   });
 
   const clearInputs = () => {

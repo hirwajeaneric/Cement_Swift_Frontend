@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import SuccessAlert from "../../components/SuccessAlert";
 import ErrorAlert from "../../components/ErrorAlert";
-import axios from "axios";
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 

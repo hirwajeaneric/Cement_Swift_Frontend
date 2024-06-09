@@ -5,7 +5,9 @@ const TopNavigation = () => {
     const [user, setUser] = useState({});
 
     useEffect(() => {
-        setUser(JSON.parse(localStorage.getItem('admin')));    
+        if (localStorage.getItem("admin")) {
+            setUser(JSON.parse(localStorage.getItem("admin")))
+        }    
     }, [])
     
     return (
@@ -41,7 +43,7 @@ const TopNavigation = () => {
                 </span>
             </div>
             <div className="inset-x-0 bottom-0 border-t border-gray-100">
-                <Link to="/admin/profile" className="flex items-center gap-2 bg-white p-2 hover:bg-gray-50">
+                <Link to="/dashboard/profile" className="flex items-center gap-2 bg-white p-2 hover:bg-gray-50">
                     <img
                         alt=""
                         src="https://w7.pngwing.com/pngs/499/519/png-transparent-kashifarif-user-profile-person-account-pic-user-interface-line-icon-thumbnail.png"
@@ -49,7 +51,7 @@ const TopNavigation = () => {
                     />
                     <div>
                         <p className="text-xs">
-                            <strong className="block font-medium">{user.firstName+" "+user.lastName}</strong>
+                            <strong className="block font-medium">{user.fullName}</strong>
                             <span>{user.email}</span>
                         </p>
                     </div>

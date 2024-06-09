@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SuccessAlert from "../../../components/SuccessAlert";
 import ErrorAlert from "../../../components/ErrorAlert";
 
@@ -8,8 +8,6 @@ const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 const clientAddress = import.meta.env.VITE_CLIENT_ADDRESS;
 
 const SignInAdmin = () => {
-  const navigate = useNavigate();
-
   const [message, setMessage] = useState({ title: "", description: "" });
   const [error, setError] = useState({ title: "", description: "" });
   const [user, setUser] = useState({ email: '', password: '' });
@@ -17,7 +15,7 @@ const SignInAdmin = () => {
   const [loading, setLaoding] = useState(false);
 
   const clearInputs = () => {
-    setUser({ email: '', password: '' });
+    setUser({ email: '', password: '', role: 'admin' });
     setMessage({ title: "", description: "" });
     setError({ title: "", description: "" });
   }
@@ -44,11 +42,10 @@ const SignInAdmin = () => {
           localStorage.setItem('admin', JSON.stringify(response.data.user));
           localStorage.setItem('admin_token', response.data.token);
           
-          clearInputs();
-
           setTimeout(() => {
-            navigate('/dashboard');
-          }, 3000);
+            clearInputs();
+            window.location.replace('/dashboard');
+          }, 1000);
         }
       })
       .catch(error => {
@@ -122,6 +119,7 @@ const SignInAdmin = () => {
                   type="email"
                   id="Email"
                   name="email"
+                  required
                   value={user.email || ''}
                   onChange={handleInputs}
                   className="mt-1 w-full p-3 rounded-md border border-slate-900 bg-white text-sm text-gray-700 shadow-sm"
@@ -134,6 +132,7 @@ const SignInAdmin = () => {
                   type={showPassword ? "text" :"password"}
                   id="Password"
                   name="password"
+                  required
                   value={user.password || ''}
                   onChange={handleInputs}
                   className="mt-1 w-full p-3 rounded-md border border-slate-900 bg-white text-sm text-gray-700 shadow-sm"
@@ -152,7 +151,7 @@ const SignInAdmin = () => {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <button type="submit" className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
+                <button type="submit" disabled={loading} className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
                   {!loading && "Sign in"}
                   {loading && <img src={`${clientAddress}/loaders/4a287dd4b9222ebb17dc354257d0ef79_w200.gif`} alt="Loading..." className="w-4"/>}
                 </button>

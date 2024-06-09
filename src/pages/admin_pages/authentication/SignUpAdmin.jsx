@@ -11,13 +11,15 @@ const SignUpAdmin = () => {
   const [message, setMessage] = useState({ title: "", description: "" });
   const [error, setError] = useState({ title: "", description: "" });
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [user, setUser] = useState({
     fullName: '',
     phone: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    role: 'admin'
   });
 
   const clearInputs = () => {
@@ -48,17 +50,19 @@ const SignUpAdmin = () => {
       return;
     } else {
       const { confirmPassword, ...rest } = user;
-
+      console.log(confirmPassword);
+      setLoading(true);
       setError({ title: '', description: '' });
 
       axios.post(`${serverAddress}/api/v1/cement-swift/auth/signup`, rest)
         .then((response) => {
           if (response.status === 201) {
+            setLoading(false);
             setMessage({ title: "Success", description: response.data.message });
-            clearInputs();
             setTimeout(() => {
+              clearInputs();
               navigate('/admin/signin');
-            }, 3000);
+            }, 1000);
           }
         })
         .catch(error => {
@@ -200,8 +204,8 @@ const SignUpAdmin = () => {
               </div>
 
               <div className="col-span-6 sm:flex sm:items-center sm:gap-4">
-                <button type="submit" className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
-                  Create an account
+                <button type="submit" disabled={loading} className="inline-block shrink-0 rounded-md border border-blue-600 bg-blue-600 px-12 py-3 text-sm font-medium text-white transition hover:bg-transparent hover:text-blue-600 focus:outline-none focus:ring active:text-blue-500">
+                  {loading ? "Processing" : "Create an account"}
                 </button>
 
                 <p className="mt-4 text-sm text-gray-500 sm:mt-0">
