@@ -32,13 +32,18 @@ const OrdersDash = () => {
               updatedAt: order.updatedAt
             });
           });
-          setOrders(orders);
+          let filter = searchParams.get('status');
+          if (filter === 'All') {
+            setOrders(orders);
+          } else {
+            setOrders(orders.filter((order) => order.status.toLowerCase() === filter.toLowerCase()));
+          }
         }
       })
       .catch((error) => {
         console.log('Error :', error.message);
       });
-  }, [])
+  }, [searchParams])
 
   return (
     <div className="flex flex-col gap-3">
