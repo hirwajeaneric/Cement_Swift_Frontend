@@ -33,6 +33,7 @@ import Purchases from "./pages/user_restricted_pages/Purchases";
 import Success from "./pages/user_restricted_pages/Success";
 import CheckoutForm from "./components/CheckoutForm";
 import PurchaseDetails from "./pages/user_restricted_pages/PurchaseDetails";
+import Reports from "./pages/admin_pages/Reports";
 
 const App = () => {
   return (
@@ -76,6 +77,7 @@ const App = () => {
           {/* Dashboard Pages  */}
           <Route path="/dashboard" element={localStorage.getItem('admin_token') ? <DashboardMainPage /> : <Navigate replace to={'/admin/signin'} />}>
             <Route path="" element={<DashBoardHome />} />
+            <Route path="reports" element={<Reports />} />
             <Route path="clients" element={<ClientsDash />} />
             <Route path="orders" element={<OrdersDash />} />
             <Route path="order/:orderId" element={<OrderDetailsDash />} />

@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react"
 import FilterOptions from "../../components/FilterOptions"
-import OverviewCards from "../../components/OverviewCards"
-import { LineChart } from "../../components/chart/LineChart"
-import { PieChart } from "../../components/chart/PieChart"
 import { BiCalendarEdit } from "react-icons/bi"
 import axios from "axios"
+import PdfCard from "../../components/reports/PdfCard"
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
-const DashBoardHome = () => {
+const Reports = () => {
   const [stats, setStats] = useState([]);
   const [shippedStats, setShippedStats] = useState([]);
   const [reportPeriod, setReportPeriod] = useState('Month');
@@ -111,19 +109,20 @@ const DashBoardHome = () => {
           {new Date().toDateString()}
         </span>
       </div>
-      <OverviewCards reportPeriod={reportPeriod} stats={stats} />
-      <div className="flex w-full justify-between items-start flex-wrap mt-6">
-        <div className="w-full md:w-[66%] rounded-md border border-gray-300 p-4">
-          <h2 className="text-sm font-bold mb-2">All recieved orders in this year</h2>
-          <LineChart monthlyOrders={monthlyOrders}/>
-        </div>
-        <div className="w-full md:w-[32%] rounded-md border border-gray-300 p-4">
-          <h2 className="text-sm font-bold mb-2">Shipped cement vs Ordered cement</h2>
-          <PieChart data={shippedStats}/>
-        </div>
+      <div>
+      <div className="flex mb-6 justify-between">
+        <h1 className="text-2xl font-bold">Reports</h1>
       </div>
+      <div className="flex gap-2 items-start">
+        <PdfCard 
+          title="Orders report" 
+          reportPeriod={reportPeriod} 
+          stats={stats}
+        />
+      </div>
+    </div>
     </div>
   )
 }
 
-export default DashBoardHome
+export default Reports
