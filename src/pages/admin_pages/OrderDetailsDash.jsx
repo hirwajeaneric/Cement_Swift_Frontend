@@ -117,7 +117,7 @@ const OrderDetailsDash = () => {
                 <option value="">Choose status</option>
                 <option value="confirmed">Confirmed</option>
                 <option value="shipped">Shipped</option>
-                {/* <option value="">Choose status</option> */}
+                <option value="received">Received</option>
               </select>
             </div>
           </div>

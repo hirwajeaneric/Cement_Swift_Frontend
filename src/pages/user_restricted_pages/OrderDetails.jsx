@@ -8,6 +8,7 @@ const OrderDetails = () => {
   const params = useParams();
   const [order, setOrder] = useState({});
   const [orderItems, setOrderItems] = useState([]);
+  const [delivery, setDelivery] = useState({});
 
   const fetchOrderItems = (orderId, userId) => {
     axios.get(`${serverAddress}/api/v1/cement-swift/cart/findByOrderId?customerId=${userId}&orderId=${orderId}`)
@@ -21,23 +22,23 @@ const OrderDetails = () => {
       });
   }
 
-  const fetchOrderInformation = (userId) => {
-    axios.get(`${serverAddress}/api/v1/cement-swift/order/findById?id=${params.orderId}`)
-      .then((response) => {
-        if (response.status === 200) {
-          setOrder(response.data.order);
-          fetchOrderItems(response.data.order._id, userId);
-        }
-      })
-      .catch((error) => {
-        console.log('Error :', error.message);
-      });
-  }
-
   useEffect(() => {
     var userId = JSON.parse(localStorage.getItem('user'))._id;
+    const fetchOrderInformation = (userId) => {
+      axios.get(`${serverAddress}/api/v1/cement-swift/order/findById?id=${params.orderId}`)
+        .then((response) => {
+          if (response.status === 200) {
+            setOrder(response.data.order);
+            setDelivery(response.data.order.delivery);
+            fetchOrderItems(response.data.order._id, userId);
+          }
+        })
+        .catch((error) => {
+          console.log('Error :', error.message);
+        });
+    }
     fetchOrderInformation(userId);
-  },[])
+  },[params.orderId])
 
   return (
     <div className="flex flex-col justify-start items-start gap-5">
@@ -46,7 +47,9 @@ const OrderDetails = () => {
         <p>Id: {order._id}</p>
         <p>Ordered on: {new Date(order.createdAt).toDateString()}</p>
         <strong>Total: {order.totalPrice}</strong>
-        
+        {delivery.deliveryDate && <p>Delivery day: <em><strong>{new Date(delivery.deliveryDate).toDateString()}</strong></em></p>}
+        <p>Order status: <span className={`px-3 py-1 ${order.status === `shipped` && `bg-blue-500`} ${order.status === `paid` && `bg-slate-400`} ${order.status === `received` && `bg-green-400`} rounded-xl text-white`}>{order.status && order.status.toUpperCase()}</span></p>
+
         {/* List of ordered items  */}
         <div className="order_items flex flex-col gap-5 justify-start">
           {orderItems.map((orderItem, index) => (
