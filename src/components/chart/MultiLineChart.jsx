@@ -37,15 +37,40 @@ const options = {
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
 
-export function LineChart({monthlyOrders}) {
+export function MultiLineChart({monthlyProductData}) {
+
   const data = {
     labels,
     datasets: [
       {
-        label: 'Dataset 1',
-        data: monthlyOrders,
+        label: 'Premium 42,5',
+        data: monthlyProductData['Premium 42,5'],
         borderColor: 'rgba(192, 92, 192, 1',
         backgroundColor: 'rgba(192, 92, 192, 0.2)',
+      },
+      {
+        label: 'Surebuild',
+        data: monthlyProductData['Surebuild'],
+        borderColor: 'rgb(53, 162, 235)',
+        backgroundColor: 'rgba(53, 162, 235, 0.5)',
+      },
+      {
+        label: 'Surecem',
+        data: monthlyProductData['Surecem'],
+        borderColor: 'rgb(0, 153, 51)',
+        backgroundColor: 'rgba(0, 153, 51, 0.5)',
+      },
+      {
+        label: 'Sureroad',
+        data: monthlyProductData['Sureroad'],
+        borderColor: 'rgb(255, 153, 51)',
+        backgroundColor: 'rgba(255, 153, 51, 0.5)',
+      },
+      {
+        label: 'Surewall',
+        data: monthlyProductData['Surewall'],
+        borderColor: 'rgb(204, 0, 0)',
+        backgroundColor: 'rgba(204, 0, 0, 0.5)',
       }
     ],
   };

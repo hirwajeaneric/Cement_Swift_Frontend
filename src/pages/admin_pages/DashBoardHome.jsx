@@ -5,6 +5,10 @@ import { LineChart } from "../../components/chart/LineChart"
 import { PieChart } from "../../components/chart/PieChart"
 import { BiCalendarEdit } from "react-icons/bi"
 import axios from "axios"
+import { getAllRequestedProducts } from "../../api/cart"
+import { getMonthlyProductData } from "../../utils/getMonthlySalaryData"
+import { productTypes } from "../../utils/ProductData"
+import { MultiLineChart } from "../../components/chart/MultiLineChart"
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
 
@@ -14,6 +18,7 @@ const DashBoardHome = () => {
   const [reportPeriod, setReportPeriod] = useState('Month');
   const [customers, setCustomers] = useState([]);
   const [monthlyOrders, setMonthlyOrders] = useState([]);
+  const [monthlyProductData, setMonthlyProductData] = useState({});
 
   // Function to generate monthly order statistics
   const generateMonthlyOrderStats = (orders) => {
@@ -26,6 +31,13 @@ const DashBoardHome = () => {
   }
 
   useEffect(() => {
+    // Fetching cart items
+    getAllRequestedProducts()
+    .then(items => {
+      setMonthlyProductData(getMonthlyProductData(items, productTypes));
+    })
+    .catch(err => console.log(err));
+    
     // Fetching orders 
     axios.get(`${serverAddress}/api/v1/cement-swift/order/list`)
       .then((response) => {
@@ -73,7 +85,7 @@ const DashBoardHome = () => {
           // Filtering by status
           var deliveredOrders = orders.filter((order) => order.status === 'shipped');
           var confirmedOrders = orders.filter((order) => order.status === 'confirmed');
-          
+
           setShippedStats([orders.length, deliveredOrders.length]);
           setStats([
             {
@@ -105,7 +117,7 @@ const DashBoardHome = () => {
     <div className="flex flex-col flex-1 w-full">
       <div className="flex justify-between">
         <FilterOptions reportPeriod={reportPeriod} setReportPeriod={setReportPeriod} />
-        
+
         <span className="flex items-center gap-2">
           <BiCalendarEdit className="font-bold text-xl" />
           {new Date().toDateString()}
@@ -115,11 +127,17 @@ const DashBoardHome = () => {
       <div className="flex w-full justify-between items-start flex-wrap mt-6">
         <div className="w-full md:w-[66%] rounded-md border border-gray-300 p-4">
           <h2 className="text-sm font-bold mb-2">All recieved orders in this year</h2>
-          <LineChart monthlyOrders={monthlyOrders}/>
+          <LineChart monthlyOrders={monthlyOrders} />
         </div>
         <div className="w-full md:w-[32%] rounded-md border border-gray-300 p-4">
           <h2 className="text-sm font-bold mb-2">Shipped cement vs Ordered cement</h2>
-          <PieChart data={shippedStats}/>
+          <PieChart data={shippedStats} />
+        </div>
+      </div>
+      <div className="flex w-full justify-between items-start flex-wrap mt-6">
+        <div className="w-full rounded-md border border-gray-300 p-4 mb-20">
+          <h2 className="text-sm font-bold mb-2">Requested cement types for each month</h2>
+          <MultiLineChart monthlyProductData={monthlyProductData} />
         </div>
       </div>
     </div>
