@@ -6,7 +6,7 @@ import { PieChart } from "../../components/chart/PieChart"
 import { BiCalendarEdit } from "react-icons/bi"
 import axios from "axios"
 import { getAllRequestedProducts } from "../../api/cart"
-import { getMonthlyProductData } from "../../utils/getMonthlySalaryData"
+import { getMonthlyProductData } from "../../utils/getMonthlyProductData"
 import { productTypes } from "../../utils/ProductData"
 import { MultiLineChart } from "../../components/chart/MultiLineChart"
 
