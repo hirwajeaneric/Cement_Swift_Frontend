@@ -1,7 +1,7 @@
 const HomeBanner = () => {
     return (
         <section
-            className="relative bg-[url(http://localhost:3000/images/Banner_Image_Cement_Swift.jpg)] bg-cover bg-center bg-no-repeat"
+            className="relative bg-[url(/images/Banner_Image_Cement_Swift.jpg)] bg-cover bg-center bg-no-repeat"
         >
             <div className="relative mx-auto max-w-screen-xl px-4 py-32 sm:px-6 lg:flex lg:h-screen lg:items-center lg:px-8">
                 <div className="max-w-xl text-left ltr:sm:text-left rtl:sm:text-right">
