@@ -28,7 +28,7 @@ const Checkout = () => {
   if (!clientSecret) {
     return (
       <div className='flex flex-col items-center justify-center gap-9 my-28'>
-        <img src="http://localhost:3000/loaders/4a287dd4b9222ebb17dc354257d0ef79_w200.gif" alt="Loading..." className="w-12" />
+        <img src="/loaders/4a287dd4b9222ebb17dc354257d0ef79_w200.gif" alt="Loading..." className="w-12" />
       </div>
     )
   }

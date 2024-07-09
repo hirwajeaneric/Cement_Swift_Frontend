@@ -63,14 +63,14 @@ const SignInAdmin = () => {
         <section className="relative flex h-32 items-end bg-gray-900 lg:col-span-5 lg:h-full xl:col-span-6">
           <img
             alt="Night"
-            src="http://localhost:3000/images/1.jpg"
+            src="/images/1.jpg"
             className="absolute inset-0 h-full w-full object-cover opacity-80"
           />
 
           <div className="hidden lg:relative lg:block lg:p-12">
             <a className="block text-white" href="/">
               <span className="sr-only">Home</span>
-              <img src="http://localhost:3000/images/favicon.png" width={80} alt="" />
+              <img src="/images/favicon.png" width={80} alt="" />
             </a>
 
             <h2 className="mt-6 text-2xl font-bold text-white sm:text-3xl md:text-4xl">Welcome to Cement Swift</h2>
@@ -87,7 +87,7 @@ const SignInAdmin = () => {
             <div className="relative -mt-16 block lg:hidden">
               <Link className="inline-flex h-16 w-16 items-center justify-center rounded-md bg-white text-blue-600 sm:h-20 sm:w-20" to="/">
                 <span className="sr-only">Home</span>
-                <img src="http://localhost:3000/images/favicon.png" width={80} alt="" />
+                <img src="/images/favicon.png" width={80} alt="" />
               </Link>
 
               <h1 className="mt-2 text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">

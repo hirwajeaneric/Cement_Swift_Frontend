@@ -2,6 +2,8 @@ import { PaymentElement, useElements, useStripe } from "@stripe/react-stripe-js"
 import { useState } from "react";
 import ErrorAlert from "./ErrorAlert";
 
+const clientAddress = import.meta.env.VITE_CLIENT_ADDRESS;
+
 const CheckoutForm = () => {
   const stripe = useStripe();
   const elements = useElements();
@@ -21,7 +23,7 @@ const CheckoutForm = () => {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: 'http://localhost:3000/success',
+        return_url: `${clientAddress}/success`,
       },
     });
 
