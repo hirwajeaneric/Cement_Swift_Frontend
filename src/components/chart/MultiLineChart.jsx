@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
+import { useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 
 ChartJS.register(
@@ -36,8 +37,11 @@ const options = {
 
 const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-
 export function MultiLineChart({monthlyProductData}) {
+
+  useEffect(() => {
+    console.log(monthlyProductData);
+  }, [monthlyProductData]);
 
   const data = {
     labels,
@@ -74,5 +78,6 @@ export function MultiLineChart({monthlyProductData}) {
       }
     ],
   };
+  
   return <Line options={options} data={data} />;
 }

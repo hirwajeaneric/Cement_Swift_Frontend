@@ -5,12 +5,36 @@ import { LineChart } from "../../components/chart/LineChart"
 import { PieChart } from "../../components/chart/PieChart"
 import { BiCalendarEdit } from "react-icons/bi"
 import axios from "axios"
-import { getAllRequestedProducts } from "../../api/cart"
-import { getMonthlyProductData } from "../../utils/getMonthlyProductData"
+import { getAllBoughtProducts } from "../../api/cart";
 import { productTypes } from "../../utils/ProductData"
 import { MultiLineChart } from "../../components/chart/MultiLineChart"
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
+
+function getMonthlySalesData(soldProducts, productTypes) {
+  // Initialize result array
+  const result = productTypes.map(product => ({
+      type: product.name,
+      data: new Array(12).fill(0) // 12 months, initialized to 0
+  }));
+
+  // Function to get month index (0-11) from date
+  function getMonthIndex(dateString) {
+      return new Date(dateString).getMonth();
+  }
+
+  // Iterate through sold products and populate the data
+  soldProducts.forEach(soldProduct => {
+      const productType = productTypes.find(pt => pt.productId === soldProduct.productId);
+      if (productType) {
+          const monthIndex = getMonthIndex(soldProduct.createdAt.$date);
+          const resultProduct = result.find(r => r.type === productType.name);
+          resultProduct.data[monthIndex] += soldProduct.quantity;
+      }
+  });
+
+  return result;
+}
 
 const DashBoardHome = () => {
   const [stats, setStats] = useState([]);
@@ -18,7 +42,7 @@ const DashBoardHome = () => {
   const [reportPeriod, setReportPeriod] = useState('Month');
   const [customers, setCustomers] = useState([]);
   const [monthlyOrders, setMonthlyOrders] = useState([]);
-  const [monthlyProductData, setMonthlyProductData] = useState({});
+  const [monthlyProductData, setMonthlyProductData] = useState([]);
 
   // Function to generate monthly order statistics
   const generateMonthlyOrderStats = (orders) => {
@@ -32,9 +56,12 @@ const DashBoardHome = () => {
 
   useEffect(() => {
     // Fetching cart items
-    getAllRequestedProducts()
+    getAllBoughtProducts()
     .then(items => {
-      setMonthlyProductData(getMonthlyProductData(items, productTypes));
+      let data = getMonthlySalesData(items, productTypes);
+      // let data = calculateMonthlySales(items, productTypes);
+      console.log(data);
+      setMonthlyProductData(data);
     })
     .catch(err => console.log(err));
     
@@ -123,7 +150,9 @@ const DashBoardHome = () => {
           {new Date().toDateString()}
         </span>
       </div>
+
       <OverviewCards reportPeriod={reportPeriod} stats={stats} />
+
       <div className="flex w-full justify-between items-start flex-wrap mt-6">
         <div className="w-full md:w-[66%] rounded-md border border-gray-300 p-4">
           <h2 className="text-sm font-bold mb-2">All recieved orders in this year</h2>
@@ -134,12 +163,14 @@ const DashBoardHome = () => {
           <PieChart data={shippedStats} />
         </div>
       </div>
+
       <div className="flex w-full justify-between items-start flex-wrap mt-6">
         <div className="w-full rounded-md border border-gray-300 p-4 mb-20">
           <h2 className="text-sm font-bold mb-2">Requested cement types for each month</h2>
           <MultiLineChart monthlyProductData={monthlyProductData} />
         </div>
       </div>
+
     </div>
   )
 }
