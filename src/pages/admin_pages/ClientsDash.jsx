@@ -26,7 +26,7 @@ const ClientsDash = () => {
   return (
     <div className="w-full">
       <div className="flex mb-6 justify-between">
-        <h1 className="text-2xl font-bold">Sellers</h1>
+        <h1 className="text-2xl font-bold">Clients</h1>
       </div>
       <UsersTable data={data} />
     </div>

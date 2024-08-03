@@ -121,7 +121,7 @@ const OrderDetailsDash = () => {
               </select>
             </div>
           </div>
-          <button type="submit" disabled={loading} className="mt-2 w-fit bg-black text-white px-3 py-2 hover:bg-slate-600 rounded-md ">
+          <button type="submit" disabled={loading} className="mt-2 mb-10 w-fit bg-black text-white px-3 py-2 hover:bg-slate-600 rounded-md ">
             {loading ? "Processing..." : "Update order"}
           </button>
         </form>
