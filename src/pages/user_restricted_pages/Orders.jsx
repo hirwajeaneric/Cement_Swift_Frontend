@@ -32,7 +32,7 @@ const Orders = () => {
               <strong>Order {order._id}</strong>
               <Link to={`/account/order/${order._id}`} className="text-slate-600">View Order</Link>
             </div>
-            <p>Total: {order.totalPrice || 0} Rwf</p>
+            <p>Total price: {order.totalPrice || 0} Rwf</p>
           <small>Made On: {new Date(order.createdAt).toDateString()} - {new Date(order.createdAt).toLocaleTimeString()}</small>
           </div>
         ))}

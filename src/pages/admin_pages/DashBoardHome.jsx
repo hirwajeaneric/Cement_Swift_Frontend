@@ -5,36 +5,13 @@ import { LineChart } from "../../components/chart/LineChart"
 import { PieChart } from "../../components/chart/PieChart"
 import { BiCalendarEdit } from "react-icons/bi"
 import axios from "axios"
-import { getAllBoughtProducts } from "../../api/cart";
-import { productTypes } from "../../utils/ProductData"
+import { getReportByYear } from "../../api/report";
 import { MultiLineChart } from "../../components/chart/MultiLineChart"
+import { useRef } from "react"
+import { useReactToPrint } from "react-to-print";
+import { ReportToPrint } from "../../components/reports/ReportToPrint"
 
 const serverAddress = import.meta.env.VITE_SERVER_ADDRESS;
-
-function getMonthlySalesData(soldProducts, productTypes) {
-  // Initialize result array
-  const result = productTypes.map(product => ({
-      type: product.name,
-      data: new Array(12).fill(0) // 12 months, initialized to 0
-  }));
-
-  // Function to get month index (0-11) from date
-  function getMonthIndex(dateString) {
-      return new Date(dateString).getMonth();
-  }
-
-  // Iterate through sold products and populate the data
-  soldProducts.forEach(soldProduct => {
-      const productType = productTypes.find(pt => pt.productId === soldProduct.productId);
-      if (productType) {
-          const monthIndex = getMonthIndex(soldProduct.createdAt.$date);
-          const resultProduct = result.find(r => r.type === productType.name);
-          resultProduct.data[monthIndex] += soldProduct.quantity;
-      }
-  });
-
-  return result;
-}
 
 const DashBoardHome = () => {
   const [stats, setStats] = useState([]);
@@ -42,7 +19,7 @@ const DashBoardHome = () => {
   const [reportPeriod, setReportPeriod] = useState('Month');
   const [customers, setCustomers] = useState([]);
   const [monthlyOrders, setMonthlyOrders] = useState([]);
-  const [monthlyProductData, setMonthlyProductData] = useState([]);
+  const [monthlyProductData, setMonthlyProductData] = useState({});
 
   // Function to generate monthly order statistics
   const generateMonthlyOrderStats = (orders) => {
@@ -55,16 +32,16 @@ const DashBoardHome = () => {
   }
 
   useEffect(() => {
-    // Fetching cart items
-    getAllBoughtProducts()
-    .then(items => {
-      let data = getMonthlySalesData(items, productTypes);
-      // let data = calculateMonthlySales(items, productTypes);
-      console.log(data);
-      setMonthlyProductData(data);
-    })
-    .catch(err => console.log(err));
-    
+
+    // Fetch report data
+    getReportByYear(new Date().getFullYear())
+      .then((data) => {
+        setMonthlyProductData(data);
+      })
+      .catch((error) => {
+        console.log(error.message);
+      })
+
     // Fetching orders 
     axios.get(`${serverAddress}/api/v1/cement-swift/order/list`)
       .then((response) => {
@@ -139,16 +116,38 @@ const DashBoardHome = () => {
       });
   }, [customers.length, reportPeriod]);
 
+  // Configuration of report printing
+  const componentRef = useRef();
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+  });
 
   return (
     <div className="flex flex-col flex-1 w-full">
-      <div className="flex justify-between">
+      <div className="flex justify-between items-center flex-wrap mb-6 gap-3">
         <FilterOptions reportPeriod={reportPeriod} setReportPeriod={setReportPeriod} />
+        <div className="flex justify-center items-center gap-3 relative">
 
-        <span className="flex items-center gap-2">
-          <BiCalendarEdit className="font-bold text-xl" />
-          {new Date().toDateString()}
-        </span>
+          <button
+            type="button"
+            onClick={handlePrint}
+            className="border-black border rounded-xl px-2 cursor-pointer hover:text-gray-700 hover:bg-gray-100">
+            Print Report
+          </button>
+
+          <div className="hidden">
+            <ReportToPrint
+              ref={componentRef}
+              monthlyProductData={monthlyProductData}
+            />
+          </div>
+
+          <span className="flex items-center gap-2">
+            <BiCalendarEdit className="font-bold text-xl" />
+            {new Date().toDateString()}
+          </span>
+
+        </div>
       </div>
 
       <OverviewCards reportPeriod={reportPeriod} stats={stats} />
